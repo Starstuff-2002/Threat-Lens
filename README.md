@@ -1,191 +1,103 @@
-ThreatLens 🛡️
+This is a comprehensive changelog. To do it justice, I’ve drafted a high-impact GitHub README that balances the "Premium" nature of your UI with the deep technical complexity of the polyglot backend.
 
-Real-Time Secure Code Analysis & Threat Intelligence Platform
+---
 
-ThreatLens is a full-stack cybersecurity platform that combines static code analysis, IOC extraction, asynchronous threat intelligence enrichment, and real-time IDE diagnostics into a modern desktop security dashboard.
+# 🛡️ ThreatLens
 
-Built with Electron, React, FastAPI, and Go, ThreatLens delivers a developer-first DevSecOps experience inspired by professional SOC tooling and modern secure coding workflows.
+**ThreatLens** is an advanced, real-time code security and threat intelligence platform. It combines a high-performance **Electron/React** frontend with a dual-engine backend—**Python FastAPI** for static analysis and a **Go microservice** for concurrent threat enrichment.
 
-✨ Features
-🔍 Real-Time Vulnerability Detection
+Designed for security researchers and developers, ThreatLens doesn't just find vulnerabilities; it correlates code patterns with live global threat indicators (IOCs).
 
-ThreatLens continuously scans code as users type and detects:
+---
 
-Hardcoded AWS Keys
-Hardcoded Passwords
-SQL Injection Patterns
-Shell Injection Vulnerabilities
-Dangerous Functions (eval, exec, subprocess)
-Risky Network Binds (0.0.0.0)
-🧠 Native Monaco Editor Diagnostics
-Embedded Monaco Editor
-VS Code-style:
-Error Squiggles
-Warning Markers
-Scrollbar Indicators
-Debounced backend analysis for optimized performance
-🌐 IOC Extraction Engine
+## 🚀 Features
 
-Automatically extracts:
+### 💻 Premium Frontend Editor
 
-IPv4 Addresses
-URLs & Domains
-MD5 Hashes
-SHA256 Hashes
+* **Monaco Integration**: A full-featured VS Code-like experience powered by `@monaco-editor/react`.
+* **Native Diagnostics**: Real-time "Error Squiggles" and scrollbar markers using the native Monaco `setModelMarkers` API.
+* **Reactive Enrichment**: Automatically extracts and enriches IPs, Hashes, and URLs as you type using a debounced 800ms execution loop.
+* **Visual Severity Upgrades**: Watch vulnerabilities escalate from "Warning" to "Critical" in real-time as the threat intel microservice flags malicious artifacts.
 
-Additional capabilities:
+### 🐍 Python Analysis Engine
 
-Local/private subnet filtering
-IOC de-duplication using Python set()
-⚡ Threat Intelligence Enrichment
+* **Regex Vulnerability Shield**: Deep-scanning for AWS keys, SQL injection patterns, shell escapes (`os.system`, `eval`), and risky network binds.
+* **Automated IOC Extraction**: Smart filtering of IPv4 addresses (ignoring local subnets), MD5/SHA256 hashes, and URIs.
+* **FastAPI Backbone**: Asynchronous endpoint handling with built-in SQLite-based Identity & Access Management (IAM).
 
-Extracted IOCs are enriched through a high-performance Go microservice.
+### 🐹 Go Threat Intel Microservice
 
-Includes:
-Concurrent IOC processing with Goroutines
-Threat scoring system
-Vendor verdict simulation
-Dynamic severity escalation
-24-hour SQLite caching layer
-🎨 Premium Security Dashboard
-Animated Threat Score Bars
-Dynamic Verdict Cards
-Real-Time UI Updates
-Loading States & Spinners
-Scan History Tracking
-🔐 Authentication & IAM
-SQLite-backed authentication
-RBAC support
-FastAPI lifespan DB initialization
-Secure login API
-🏗️ Architecture
-┌──────────────────────┐
-│  Electron + React    │
-│  Monaco Editor UI    │
-└──────────┬───────────┘
-           │
-           ▼
-┌──────────────────────┐
-│   FastAPI Backend    │
-│ Regex Analysis Engine│
-│    IOC Extraction    │
-└──────────┬───────────┘
-           │
-           ▼
-┌──────────────────────┐
-│   Go Microservice    │
-│ Threat Intelligence  │
-│ Concurrent Enrichment│
-│    SQLite Cache      │
-└──────────────────────┘
-🛠️ Tech Stack
-Frontend
-Electron
-React
-Monaco Editor
-Lodash
-CSS Animations
-Backend
-Python FastAPI
-SQLite
-HTTPX
-Threat Intel Microservice
-Golang
-Goroutines
-WaitGroups
-Mutex Locks
-SQLite (modernc.org/sqlite)
-🚀 Installation
-1️⃣ Clone the Repository
-git clone https://github.com/yourusername/threatlens.git
-cd threatlens
-2️⃣ Frontend Setup
+* **High Concurrency**: Leverages `sync.WaitGroup` and Goroutines to process dozens of IOC lookups in parallel without blocking.
+* **Intelligent Caching**: A `modernc.org/sqlite` (No-CGO) caching layer that persists enrichment data for 24 hours to optimize performance.
+* **Deterministic Mocking**: A sophisticated simulation engine that provides realistic API latency and specific demo-ready verdicts.
+
+---
+
+## 🏗️ Architectural Breakdown
+
+ThreatLens utilizes a distributed architecture to ensure UI responsiveness while performing heavy analysis.
+
+### Tech Stack
+
+| Component | Technology |
+| --- | --- |
+| **Frontend** | Electron, React, Monaco Editor, CSS3 Animations |
+| **Primary API** | Python 3.10+, FastAPI, Pydantic, HTTPX |
+| **Microservice** | Go 1.21+, Goroutines, SQLite (CGO-free) |
+| **Database** | SQLite (User Auth & Enrichment Cache) |
+
+---
+
+## 🛠️ Installation & Setup
+
+### 1. Go Microservice (Port 8081)
+
+```bash
+cd services/intel-go
+go run main.go
+
+```
+
+### 2. Python Backend (Port 8000)
+
+```bash
+cd services/analysis-py
+pip install -r requirements.txt
+uvicorn main:app --reload
+
+```
+
+### 3. Electron Frontend
+
+```bash
 cd frontend
 npm install
-npm run dev
-3️⃣ Backend Setup (FastAPI)
-cd backend
-pip install -r requirements.txt
-uvicorn app.main:app --reload
-4️⃣ Go Microservice Setup
-cd go-service
-go mod tidy
-go run main.go
-▶️ Running ThreatLens
+npm start
 
-Start services in the following order:
+```
 
-FastAPI Backend
-Go Threat Intel Microservice
-Electron Frontend
+---
 
-The application will automatically begin real-time scanning.
+## 🧪 Demo Scenarios
 
-🧪 Demo Scenarios
-demo1_secrets.py
+The project includes pre-configured scripts to demonstrate full-spectrum detection:
 
-Triggers:
+1. **`demo1_secrets.py`**: Triggers critical flags for hardcoded AWS credentials and SQLi.
+2. **`demo2_malicious_domain.py`**: Demonstrates URL extraction and Go-based domain reputation lookups.
+3. **`demo3_c2_ip_hash.py`**: Showcases the **Dynamic Severity Upgrade**—an IP is detected, enriched as "Malicious," and the UI automatically upgrades the alert level.
 
-AWS Key Detection
-SQL Injection Detection
-demo2_malicious_domain.py
+---
 
-Triggers:
+## 📈 Roadmap (Phase 4 Milestone Reached)
 
-URL Extraction
-Threat Intelligence Enrichment
-demo3_c2_ip_hash.py
+* [x] Phase 1: Core Electron/Monaco Integration
+* [x] Phase 2: Python Regex Analysis Engine
+* [x] Phase 3: Go Microservice & Concurrent Processing
+* [x] Phase 4: Reactive UI & Visual Enrichment Upgrades
+* [ ] *Future: LLM-based Remediation Suggestions*
 
-Triggers:
+---
 
-IP & Hash Extraction
-Dynamic Severity Escalation
-🔎 Detection Examples
-Hardcoded AWS Keys
-(AKIA[0-9A-Z]{16})
-Hardcoded Passwords
-(?i)password\s*=\s*[\"']([^\"']+)[\"']
-SQL Injection
-(?i)(SELECT\s+.*?\s+FROM\s+.*?|UNION\s+ALL\s+SELECT|INSERT\s+INTO\s+.*?\s+VALUES)
-Dangerous Function Usage
-(\beval\s*\()
-⚙️ Key Engineering Highlights
-Reactive frontend state management
-Real-time Monaco diagnostics API integration
-Concurrent IOC enrichment architecture
-Intelligent SQLite caching
-Async FastAPI ↔ Go communication
-Deterministic mock threat engine for demos
-Dynamic severity upgrades based on enrichment verdicts
-📌 Future Enhancements
-VirusTotal API Integration
-YARA Rule Support
-MITRE ATT&CK Mapping
-AI-Assisted Threat Analysis
-Docker Deployment
-SIEM Integrations
-WebSocket Live Updates
-File Upload Scanning
-🎯 Project Goals
+**Developed for the 100% Completion Milestone.**
 
-ThreatLens was designed to demonstrate:
-
-Real-time secure coding workflows
-Threat intelligence integration
-Concurrent microservice design
-Native IDE security diagnostics
-Modern DevSecOps principles
-📄 License
-
-MIT License
-
-## ⚠️ Disclaimer
-
-ThreatLens is currently developed for **educational, research, and demonstration purposes** including:
-
-* Learning
-* Research
-* Hackathons
-* Security Prototyping
-
-The platform is actively evolving and is planned to mature into a more production-ready cybersecurity solution with expanded threat intelligence integrations, improved scalability, enhanced detection capabilities, and enterprise-grade security features in future iterations.
+*ThreatLens: Seeing the threats hidden in your syntax.*
